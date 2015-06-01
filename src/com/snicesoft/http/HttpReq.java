@@ -10,13 +10,11 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.lidroid.xutils.HttpUtils;
-import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
 import com.lidroid.xutils.http.HttpHandler.State;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-import com.snicesoft.service.ServiceCallback;
 
 @SuppressWarnings("deprecation")
 public class HttpReq {
@@ -121,32 +119,6 @@ public class HttpReq {
 				&& handler.getState() != State.SUCCESS
 				&& handler.getState() != State.CANCELLED) {
 			handler.cancel();
-		}
-	}
-
-	public static abstract class HttpCallback extends RequestCallBack<String> {
-		private ServiceCallback<?> callback;
-
-		public HttpCallback(ServiceCallback<?> callback) {
-			this.callback = callback;
-		}
-
-		@Override
-		public void onStart() {
-			if (callback != null)
-				callback.onStart();
-		}
-
-		@Override
-		public void onLoading(long total, long current, boolean isUploading) {
-			if (callback != null)
-				callback.onLoading(total, current, isUploading);
-		}
-
-		@Override
-		public void onFailure(HttpException error, String msg) {
-			if (callback != null)
-				callback.onFailure(error, msg);
 		}
 	}
 }
