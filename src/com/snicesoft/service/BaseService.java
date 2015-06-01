@@ -1,21 +1,21 @@
 package com.snicesoft.service;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.snicesoft.util.NetworkUtil;
 
-public class BaseService {
-	private Context context;
+public class BaseService<A extends Activity> {
+	private A activity;
 
-	public Context getContext() {
-		return context;
+	public BaseService(A activity) {
+		this.activity = activity;
 	}
 
-	public BaseService(Context context) {
-		this.context = context;
+	public A getActivity() {
+		return activity;
 	}
 
 	public boolean isNetConnect() {
-		return NetworkUtil.isConnect(getContext());
+		return NetworkUtil.isConnect(getActivity());
 	}
 }

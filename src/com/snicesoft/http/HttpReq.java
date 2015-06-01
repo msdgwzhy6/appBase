@@ -35,7 +35,7 @@ public class HttpReq {
 	}
 
 	public void GET(String api, Map<String, Object> params,
-			HttpCallback callBack) {
+			RequestCallBack<String> callBack) {
 		RequestParams rp = new RequestParams();
 		if (params != null)
 			for (String key : params.keySet()) {
@@ -57,7 +57,7 @@ public class HttpReq {
 	 * @param callBack
 	 */
 	public void POST(String api, Map<String, Object> params,
-			HttpCallback callBack) {
+			RequestCallBack<String> callBack) {
 		RequestParams rp = new RequestParams();
 		if (params != null)
 			for (String key : params.keySet()) {
@@ -84,7 +84,7 @@ public class HttpReq {
 	 * @param callBack
 	 */
 	public void POST(String api, String requestBody, String contentType,
-			HttpCallback callBack) {
+			RequestCallBack<String> callBack) {
 		RequestParams params = new RequestParams();
 		try {
 			if (!TextUtils.isEmpty(contentType))
@@ -111,7 +111,7 @@ public class HttpReq {
 	 *            请求回调函数
 	 */
 	public void postJson(String api, Map<String, Object> params,
-			HttpCallback callBack) {
+			RequestCallBack<String> callBack) {
 		String requestBody = JSON.toJSONString(params);
 		POST(api, requestBody, ContentType.JSON, callBack);
 	}
