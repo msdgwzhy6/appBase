@@ -2,16 +2,16 @@ package com.snicesoft.base;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.snicesoft.Application;
+import com.snicesoft.avlib.base.AvFragment;
 import com.snicesoft.avlib.base.AvFragmentActivity;
 import com.snicesoft.avlib.rule.IData;
 import com.snicesoft.avlib.rule.IHolder;
 import com.snicesoft.util.FragmentUtil;
 
 public abstract class BaseActivity<H extends IHolder, D extends IData> extends
-		AvFragmentActivity<H, D> implements OnClickListener {
+		AvFragmentActivity<H, D> {
 	public Application getApp() {
 		return (Application) getApplication();
 	}
@@ -22,17 +22,25 @@ public abstract class BaseActivity<H extends IHolder, D extends IData> extends
 		getApp().addActivity(this);
 	}
 
-	protected BaseFragment<?, ?, ?> curFragment;
+	protected AvFragment<?, ?, ?> curFragment;
 
-	protected void openFragment(int id, BaseFragment<?, ?, ?> fragment) {
-		FragmentUtil.openFragment(this, id, fragment);
+	public void openFragment(int id, AvFragment<?, ?, ?> fragment) {
+		FragmentUtil.openFragment(id, fragment, getSupportFragmentManager());
+		curFragment = fragment;
+	}
+
+	public void replaceFragment(int id, AvFragment<?, ?, ?> fragment,
+			boolean backStack) {
+		FragmentUtil.replaceFragment(id, fragment, getSupportFragmentManager(),
+				backStack);
 		curFragment = fragment;
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (v == null)
-			return;
+		super.onClick(v);
+		if (curFragment != null && curFragment.getHolder() != null)
+			curFragment.getHolder().onClick(v);
 	}
 
 	@Override

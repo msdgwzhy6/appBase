@@ -3,18 +3,16 @@ package com.snicesoft.util;
 import java.util.List;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 public class FragmentUtil {
-	public static void openFragment(FragmentActivity activity, int id,
-			Fragment fragment) {
+	public static void openFragment(int id, Fragment fragment,
+			FragmentManager fragmentManager) {
 		try {
-			FragmentTransaction transaction = activity
-					.getSupportFragmentManager().beginTransaction();
-			List<Fragment> list = activity.getSupportFragmentManager()
-					.getFragments();
+			FragmentTransaction transaction = fragmentManager
+					.beginTransaction();
+			List<Fragment> list = fragmentManager.getFragments();
 			if (list == null || list.size() == 0) {
 				transaction.add(id, fragment).commit();
 			} else {
@@ -39,9 +37,11 @@ public class FragmentUtil {
 	}
 
 	public static void replaceFragment(int id, Fragment fragment,
-			FragmentManager fragmentManager) {
-		FragmentTransaction fTransaction = fragmentManager.beginTransaction();
-		fTransaction.replace(id, fragment);
-		fTransaction.commit();
+			FragmentManager fragmentManager, boolean backStack) {
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.replace(id, fragment);
+		if (backStack)
+			transaction.addToBackStack(null);
+		transaction.commit();
 	}
 }
