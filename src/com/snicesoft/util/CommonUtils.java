@@ -10,6 +10,7 @@ public class CommonUtils {
 	public static void openActivity(Context context, Class<?> clazz,
 			Bundle... bundles) {
 		Intent intent = new Intent(context, clazz);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (bundles != null && bundles.length > 0) {
 			intent.putExtras(bundles[0]);
 		}

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
@@ -13,7 +12,6 @@ import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.bitmap.BitmapDisplayConfig;
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.AVLib.LoadImg;
-import com.snicesoft.util.DialogUtil;
 
 /**
  * 程序Application，作为应用管理配置
@@ -34,8 +32,6 @@ public class Application extends android.app.Application {
 		return dbUtils;
 	}
 
-	private static ProgressDialog progressDialog;
-
 	/**
 	 * 
 	 * @param message
@@ -44,30 +40,11 @@ public class Application extends android.app.Application {
 	 *            [0]:Cancelable <br>
 	 *            [1]:CanceledOnTouchOutside
 	 */
-	public static void showDialog(CharSequence message, boolean... flag) {
-		if (flag != null) {
-			if (flag.length > 0)
-				progressDialog.setCancelable(flag[0]);
-			if (flag.length > 1)
-				progressDialog.setCanceledOnTouchOutside(flag[1]);
-		}
-		progressDialog.setMessage(message);
-		progressDialog.show();
-	}
-
-	public static void closeDialog() {
-		if (progressDialog.isShowing())
-			progressDialog.dismiss();
-	}
-
-	public Application() {
-		bitmapUtils = new BitmapUtils(this);
-		dbUtils = DbUtils.create(this, "app.db");
-	}
 
 	@Override
 	public void onCreate() {
-		progressDialog = DialogUtil.getProgressDialog(getBaseContext());
+		bitmapUtils = new BitmapUtils(getBaseContext());
+		dbUtils = DbUtils.create(getBaseContext(), "app.db");
 		AVLib.setLoadImg(new LoadImg() {
 			@SuppressWarnings("deprecation")
 			@Override

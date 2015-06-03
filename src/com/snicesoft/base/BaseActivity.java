@@ -25,6 +25,8 @@ public abstract class BaseActivity<H extends IHolder, D extends IData> extends
 	protected AvFragment<?, ?, ?> curFragment;
 
 	public void openFragment(int id, AvFragment<?, ?, ?> fragment) {
+		if (curFragment != null && curFragment == fragment)
+			return;
 		FragmentUtil.openFragment(id, fragment, getSupportFragmentManager());
 		curFragment = fragment;
 	}
@@ -39,12 +41,13 @@ public abstract class BaseActivity<H extends IHolder, D extends IData> extends
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
-		if (curFragment != null && curFragment.getHolder() != null)
-			curFragment.getHolder().onClick(v);
+		if (curFragment != null)
+			curFragment.onClick(v);
 	}
 
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		getApp().removeActivity(this);
 	}
 }
