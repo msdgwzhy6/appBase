@@ -16,6 +16,7 @@ import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.AVLib.LoadImg;
 import com.snicesoft.http.APIs;
 import com.snicesoft.http.Charset;
+import com.snicesoft.http.HttpReq;
 
 /**
  * 程序Application，作为应用管理配置
@@ -30,6 +31,14 @@ public class Application extends android.app.Application {
 	private BitmapUtils bitmapUtils;
 
 	private HashMap<String, DbUtils> dbHashMap = new HashMap<String, DbUtils>();
+
+	private HttpReq httpReq;
+
+	public HttpReq httpReq() {
+		if (httpReq == null)
+			httpReq = new HttpReq(httpUtils);
+		return httpReq;
+	}
 
 	public HttpUtils hu() {
 		return httpUtils;
