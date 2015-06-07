@@ -2,10 +2,8 @@ package com.snicesoft.http;
 
 public interface APIs {
 	interface Base {
-		String IP = "testapi.mayiangel.com";
-		String PORT = "80";
-		String IMG_URL = "http://testfile.mayiangel.com/";
-		String BASE_URL = "http://" + IP + ":" + PORT + "/";
+		String IMG_URL = "http://img.snicesoft.com/";
+		String BASE_URL = "http://api.snicesoft.com/";
 		int TIME_OUT = 60 * 1000;
 	}
 
