@@ -16,25 +16,26 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.snicesoft.http.APIs;
-import com.snicesoft.http.Charset;
 import com.snicesoft.http.ContentType;
 
 @SuppressWarnings("deprecation")
 public class APICloudSDK {
-	private APICloudSDK() {
+	private static APICloudSDK instance;
 
+	public static APICloudSDK getInstance(HttpUtils httpUtils) {
+		if (instance == null)
+			instance = new APICloudSDK(httpUtils);
+		return instance;
 	}
 
-	private static Map<String, HttpHandler<String>> httpHandlerMap = new HashMap<String, HttpHandler<String>>();
-	private static HttpUtils httpUtils = new HttpUtils();
-	static {
-		httpUtils = new HttpUtils();
-		httpUtils.configTimeout(APIs.Base.TIME_OUT);
-		httpUtils.configRequestThreadPoolSize(10);
-		httpUtils.configResponseTextCharset(Charset.UTF_8);
+	private HttpUtils httpUtils;
+	private Map<String, HttpHandler<String>> httpHandlerMap = new HashMap<String, HttpHandler<String>>();
+
+	private APICloudSDK(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
 	}
 
-	public static void GET(String api, Map<String, Object> params,
+	public void GET(String api, Map<String, Object> params,
 			RequestCallBack<String> callBack) {
 		RequestParams rp = getRP(params);
 		cancelHandler(httpHandlerMap.get(api));
@@ -43,7 +44,7 @@ public class APICloudSDK {
 		httpHandlerMap.put(api, hh);
 	}
 
-	public static void POST(String api, Map<String, Object> params,
+	public void POST(String api, Map<String, Object> params,
 			RequestCallBack<String> callBack) {
 		RequestParams rp = getRP(params);
 		cancelHandler(httpHandlerMap.get(api));
@@ -52,7 +53,7 @@ public class APICloudSDK {
 		httpHandlerMap.put(api, hh);
 	}
 
-	public static void PUT(String api, Map<String, Object> params,
+	public void PUT(String api, Map<String, Object> params,
 			RequestCallBack<String> callBack) {
 		RequestParams rp = getRP(params);
 		cancelHandler(httpHandlerMap.get(api));
@@ -61,7 +62,7 @@ public class APICloudSDK {
 		httpHandlerMap.put(api, hh);
 	}
 
-	public static void DELETE(String api, Map<String, Object> params,
+	public void DELETE(String api, Map<String, Object> params,
 			RequestCallBack<String> callBack) {
 		RequestParams rp = getRP(params);
 		cancelHandler(httpHandlerMap.get(api));
@@ -70,7 +71,7 @@ public class APICloudSDK {
 		httpHandlerMap.put(api, hh);
 	}
 
-	private static RequestParams getRP(Map<String, Object> params) {
+	private RequestParams getRP(Map<String, Object> params) {
 		RequestParams rp = new RequestParams();
 		try {
 			rp.setContentType(ContentType.JSON);
@@ -87,7 +88,7 @@ public class APICloudSDK {
 		return rp;
 	}
 
-	private static void cancelHandler(HttpHandler<String> handler) {
+	private void cancelHandler(HttpHandler<String> handler) {
 		if (handler != null && handler.getState() != State.FAILURE
 				&& handler.getState() != State.SUCCESS
 				&& handler.getState() != State.CANCELLED) {
@@ -95,14 +96,14 @@ public class APICloudSDK {
 		}
 	}
 
-	private static String getYourAppKey() {
+	private String getYourAppKey() {
 		long now = System.currentTimeMillis();
 		return SHA1(APIs.APICloud.APP_ID + "UZ" + APIs.APICloud.APP_KEY + "UZ"
 				+ now)
 				+ "." + now;
 	}
 
-	private static String SHA1(String decript) {
+	private String SHA1(String decript) {
 		try {
 			MessageDigest digest = java.security.MessageDigest
 					.getInstance("SHA-1");

@@ -1,6 +1,7 @@
 package com.snicesoft;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,9 +10,12 @@ import android.view.View;
 
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.bitmap.BitmapDisplayConfig;
 import com.snicesoft.avlib.AVLib;
 import com.snicesoft.avlib.AVLib.LoadImg;
+import com.snicesoft.http.APIs;
+import com.snicesoft.http.Charset;
 
 /**
  * 程序Application，作为应用管理配置
@@ -21,30 +25,32 @@ import com.snicesoft.avlib.AVLib.LoadImg;
  */
 public class Application extends android.app.Application {
 
-	private static BitmapUtils bitmapUtils;
-	private static DbUtils dbUtils;
+	private HttpUtils httpUtils;
 
-	public static BitmapUtils bt() {
+	private BitmapUtils bitmapUtils;
+
+	private HashMap<String, DbUtils> dbHashMap = new HashMap<String, DbUtils>();
+
+	public HttpUtils hu() {
+		return httpUtils;
+	}
+
+	public BitmapUtils bu() {
 		return bitmapUtils;
 	}
 
-	public static DbUtils dt() {
-		return dbUtils;
+	public DbUtils du(String dbName) {
+		if (dbHashMap.get(dbName) == null)
+			dbHashMap.put(dbName, DbUtils.create(getBaseContext(), dbName));
+		return dbHashMap.get(dbName);
 	}
-
-	/**
-	 * 
-	 * @param message
-	 * @param flag
-	 * <br>
-	 *            [0]:Cancelable <br>
-	 *            [1]:CanceledOnTouchOutside
-	 */
 
 	@Override
 	public void onCreate() {
+		httpUtils.configTimeout(APIs.Base.TIME_OUT);
+		httpUtils.configRequestThreadPoolSize(10);
+		httpUtils.configResponseTextCharset(Charset.UTF_8);
 		bitmapUtils = new BitmapUtils(getBaseContext());
-		dbUtils = DbUtils.create(getBaseContext(), "app.db");
 		AVLib.setLoadImg(new LoadImg() {
 			@SuppressWarnings("deprecation")
 			@Override

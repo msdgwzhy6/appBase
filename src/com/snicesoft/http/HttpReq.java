@@ -21,15 +21,8 @@ public class HttpReq {
 	private Map<String, HttpHandler<String>> httpHandlerMap = new HashMap<String, HttpHandler<String>>();
 	private HttpUtils httpUtils;
 
-	public HttpReq() {
-		this.httpUtils = new HttpUtils();
-		this.httpUtils.configTimeout(APIs.Base.TIME_OUT);
-		this.httpUtils.configRequestThreadPoolSize(10);
-		this.httpUtils.configResponseTextCharset(Charset.UTF_8);
-	}
-
-	public HttpUtils httpUtils() {
-		return httpUtils;
+	public HttpReq(HttpUtils httpUtils) {
+		this.httpUtils = httpUtils;
 	}
 
 	public void GET(String api, Map<String, Object> params,
