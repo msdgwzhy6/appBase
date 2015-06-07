@@ -47,6 +47,7 @@ public class Application extends android.app.Application {
 
 	@Override
 	public void onCreate() {
+		httpUtils = new HttpUtils();
 		httpUtils.configTimeout(APIs.Base.TIME_OUT);
 		httpUtils.configRequestThreadPoolSize(10);
 		httpUtils.configResponseTextCharset(Charset.UTF_8);
